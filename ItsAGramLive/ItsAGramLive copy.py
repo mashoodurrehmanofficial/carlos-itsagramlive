@@ -242,7 +242,7 @@ class ItsAGramLive:
         return 'ig_sig_key_version=' + self.SIG_KEY_VERSION + '&signed_body=' + hmac.new(
             self.IG_SIG_KEY.encode('utf-8'), data.encode('utf-8'), hashlib.sha256).hexdigest() + '.' + parsed_data
 
-    def start(self,file_path='',new_request_status_file_path=''):
+    def start(self,file_path,new_request_status_file_path):
         print("Let's do it!")
         if not self.login():
             print("Error {}".format(self.LastResponse.status_code))
@@ -285,14 +285,14 @@ class ItsAGramLive:
                         except :
                             checkNewRequest()
                             # return True
-                    # time.sleep(5)
+                    time.sleep(5)
                     while self.is_running:
-                        for second in range(5*60):
-                            # if checkNewRequest() is True:
-                                # print("New Request detected - closing Stream Cycle")
-                                # break
+                        for second in range(30):
+                            if checkNewRequest() is True:
+                                print("New Request detected - closing Stream Cycle")
+                                break
                             print(f"-> Waiting - {second}")
-                            time.sleep(1)
+                            time.sleep(second)
                         break
                         cmd = input('command> ')
 
